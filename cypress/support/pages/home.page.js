@@ -6,18 +6,11 @@ export default class HomePage {
     logoLink = 'a[href="https://magento.softwaretestingboard.com/"]'
     searchPage = '#search'
     showcartPage = '.showcart'
-    
+    menuNav = '.navigation'
+    bannersPromo = '.blocks-promo'
+    textProd = '.content-heading .title'
+    textInfo = '.content-heading .info'
+    productItems = '.product-items'
+    footer = '.footer'
 
-
-    cy.get('#store.menu ul#ui-id-2').children('li').each(($li) => {
-        cy.wrap($li).within(() => {
-          cy.get('a').should('have.attr', 'href').and('include', 'https://'); // Verifica se o href começa com "https://"
-      
-          // Verifica o texto dentro do <span>
-          cy.get('span').invoke('text').then((text) => {
-            // Faça o que desejar com o texto, por exemplo:
-            expect(text.trim()).not.to.be.empty; // Verifica se o texto não está vazio
-          });
-        });
-      });
 }

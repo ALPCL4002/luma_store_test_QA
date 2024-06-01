@@ -6,15 +6,23 @@ describe('Validade home page', () => {
         cy.visit("");
     })
 
-    it('Validade header',() => {
+    it('Should load the home page successfully',() => {
         cy.get(homePage.headerSupport).contains('Support This Project')
         cy.get(homePage.headerLogin).contains('Sign In')
         cy.get(homePage.headerCreate).contains('Create an Account')
-    })
-    it('Validade logo Page, Search and shopping cart',() => {
+    
         cy.get(homePage.logoPage).should('be.visible');
         cy.get(homePage.searchPage).should('have.attr', 'placeholder', 'Search entire store here...')
         cy.get(homePage.showcartPage).should('be.visible');
+
+        cy.get(homePage.menuNav).should('be.visible')
+        cy.get(homePage.bannersPromo).should('be.visible')
+
+        cy.get(homePage.textProd).should('contain', 'Hot Sellers')
+        cy.get(homePage.textInfo).should('contain', 'Here is what`s trending on Luma right now')
+        
+        cy.get(homePage.productItems).should('be.visible')
+        cy.get(homePage.footer).should('be.visible')
     })
   
 })
