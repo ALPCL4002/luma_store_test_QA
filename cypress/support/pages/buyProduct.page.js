@@ -1,6 +1,8 @@
 export default class BuyProduct {
     sizeProduct = '.product-items > :nth-child(1) > div > div > div > .size > div'
     colorProduct = '.product-items > :nth-child(1) > div > div > div > .color > div'
+    priceProduct = ':nth-child(1) > .product-item-info > .product-item-details > .price-box'
+    pricevalueProduct = 'span.price-wrapper'
     submitProduct = '.product-items > :nth-child(1) > div > div > .product-item-inner > .product-item-actions > .actions-primary > form > button[type="submit"]'
     cartValue = '.showcart > .counter' 
     cartSelect = '.showcart'
@@ -18,6 +20,12 @@ export default class BuyProduct {
     buttonNext = 'button[data-role="opc-continue"]'
     adressDetails = '.billing-address-details'
     placeOrder = 'button[title="Place Order"]'
+    cartTotal = '.items-total'
+    cartsubtotalPrice = '.amount > .price-wrapper > .price'
+    cartprodPrice = '.minicart-price > .price'
+    cartSize = '.product > :nth-child(2) > span'
+    cartColor = '.product > :nth-child(4) > span'
+    opencartDetails = '.toggle'
 
     addtoCart(size, color){
         cy.get(`${this.sizeProduct} > [aria-label="${size}"]`).click();
@@ -48,5 +56,9 @@ export default class BuyProduct {
 
     submitCheckout(){
         cy.get(this.placeOrder).click()
+    }
+
+    openDetails(){
+        cy.get(opencartDetails).click()
     }
 }

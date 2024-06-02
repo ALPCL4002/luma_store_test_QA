@@ -4,12 +4,13 @@
   "description": "Este é um desafio para que possamos ver as suas habilidades como QA/Tester.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "concurrently \"npx cypress run\" \"set CYPRESS_VERIFY_TIMEOUT=100000\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "concurrently": "^8.2.2",
     "cypress": "^13.10.0"
   },
   "dependencies": {
