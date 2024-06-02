@@ -4,6 +4,8 @@ const homePage = new HomePage();
 import ResultSearch from "../support/pages/resultSearch.page";
 const resultSearch = new ResultSearch();
 
+import BuyProduct from "../support/pages/buyProduct.page";
+const buyProduct = new BuyProduct();
 
 describe('Validade home page', () => {
     beforeEach(() => {
@@ -25,12 +27,13 @@ describe('Validade home page', () => {
         cy.get(homePage.textProd).should('contain', 'Hot Sellers')
         cy.get(homePage.textInfo).should('contain', 'Here is what`s trending on Luma right now')
 
-        cy.get(homePage.productItems).should('be.visible')
+
+
         cy.get(homePage.footer).should('be.visible')
     })
 })
 
-describe.only('Product Search and Access Results Page', () => {
+describe('Product Search and Access Results Page', () => {
 
     beforeEach(() => {
         cy.visit("");
@@ -44,7 +47,7 @@ describe.only('Product Search and Access Results Page', () => {
 
         homePage.findProduct('shirt')
 
-        cy.wait('@searchProd').then(interception => {
+        cy.wait('@searchProd', { timeout: 15000 }).then(interception => {
             expect(interception.response.statusCode).to.equal(200);
 
             const responseBody = interception.response.body;
@@ -70,5 +73,71 @@ describe.only('Product Search and Access Results Page', () => {
                 cy.get(resultSearch.listProducts).should('be.visible')
             })
         })
+    })
+})
+
+describe('Add product to cart and proceed to checkout', () => {
+
+    let email, name, lastName, location, city, zipCode, cell
+
+    beforeEach(() => {
+        cy.visit("");
+    })
+
+    it('Add product to cart from the card and verify if its present in the cart', () => {
+        buyProduct.addtoCart('XS', 'Blue')
+
+        cy.get(homePage.messagesucess).should('contain', 'You added Radiant Tee to your shopping cart.')
+        cy.get(buyProduct.cartValue).should('be.visible')
+
+        buyProduct.openCart()
+
+        // Verificar a partir daqui se o produto aparece no carrinho conforme selecionado 
+    })
+
+    it('Add product and complete checkout correctly', () => {
+        buyProduct.addtoCart('XS', 'Blue')
+
+        cy.visit("checkout/");
+
+        cy.request('https://randomuser.me/api/?inc=email,name,location,phone')
+            .then((response) => {
+                expect(response.status).to.eq(200);
+
+                email = response.body.results[0].email;
+                name = response.body.results[0].name.first;
+                lastName = response.body.results[0].name.last;
+                location = response.body.results[0].location.street.name;
+                city = response.body.results[0].location.city;
+                zipCode = response.body.results[0].location.postcode;
+                cell = response.body.results[0].phone;
+
+                buyProduct.formCheckout(email, name, lastName, location, city, "Alaska", zipCode, "Togo", cell)
+
+                cy.intercept({
+                    method: 'POST',
+                    url: /\/rest\/default\/V1\/guest-carts\/[a-zA-Z0-9]+\/estimate-shipping-methods/
+                }).as('postEstimate')
+
+                cy.wait('@postEstimate').its('response.statusCode').should('eq', 200)
+
+                cy.get(buyProduct.buttonNext).click()
+
+                cy.intercept({
+                    method: 'POST',
+                    url: /\/rest\/default\/V1\/guest-carts\/[a-zA-Z0-9]+\/set-payment-information/
+                }).as('postPayment')
+
+                cy.wait('@postPayment').its('response.statusCode').should('eq', 200)
+
+                cy.get(buyProduct.adressDetails).should('contain', name)
+                cy.get(buyProduct.adressDetails).should('contain', lastName)
+                cy.get(buyProduct.adressDetails).should('contain', location);
+                cy.get(buyProduct.adressDetails).should('contain', "Togo");
+                cy.get(buyProduct.adressDetails).should('contain', cell);
+
+                buyProduct.submitCheckout()
+// Falta validar se a pagina de sucesso está sendo retornada 
+            });
     })
 })

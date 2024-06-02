@@ -13,6 +13,7 @@ export default class HomePage {
     productItems = '.product-items'
     footer = '.footer'
     searchList = '#search_autocomplete > ul[role="listbox"] li[role="option"] span.qs-option-name'
+    messagesucess = '.message-success'
 
     findProduct(name){
       cy.get(this.searchPage).type(name)
