@@ -1,17 +1,17 @@
-name: Cypress tests
+name: Cypress Tests
+
 on: push
+
 jobs:
-  cypress-run:
-    name: Cypress run
+  npm-run:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      # Install npm dependencies, cache them correctly
+      # and run all Cypress tests
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
-          project: ./cypress/e2e/
-          record: true
-        env:
-          CYPRESS_RECORD_KEY: ${{ 557795a0-7094-4c43-a556-dc9bc5ab990c }}
-     
+          build: npm run build
+          start: npm start
