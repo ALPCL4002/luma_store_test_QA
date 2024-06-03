@@ -22,8 +22,6 @@ describe('Validade home page', () => {
         cy.get(homePage.textProd).should('contain', 'Hot Sellers')
         cy.get(homePage.textInfo).should('contain', 'Here is what`s trending on Luma right now')
 
-
-        console.log("test")
         cy.get(homePage.footer).should('be.visible')
     })
 })
