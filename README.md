@@ -1,4 +1,4 @@
-# Q.A Challenge Luma Store - InfinityBase
+# Q.A Challenge Luma Store 
 
 Esse teste tem como objetivo automatizar algumas funcionalidades da página https://magento.softwaretestingboard.com, utilizado o Cypress. 
 
